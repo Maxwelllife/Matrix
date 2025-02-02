@@ -3,7 +3,7 @@ import TableRow from '@/entities/matrix/ui/TableRow';
 import './MatrixTable.module.css';
 
 const MatrixTable: React.FC = () => {
-    const { matrix, rowSums, columnPercentiles } = useMatrix();
+    const { matrix, rowSums, columnPercentiles, addRow, removeRow } = useMatrix();
 
     return (
         <table className="">
@@ -17,7 +17,13 @@ const MatrixTable: React.FC = () => {
             </thead>
             <tbody>
             {matrix.map((row, rowIndex) => (
-                <TableRow key={rowIndex} row={row} rowIndex={rowIndex} sum={rowSums[rowIndex]} />
+                <TableRow
+                    key={rowIndex}
+                    row={row}
+                    rowIndex={rowIndex}
+                    sum={rowSums[rowIndex]}
+                    onRemove={() => removeRow(rowIndex)}
+                />
             ))}
             <tr>
                 {columnPercentiles.map((percentile, colIndex) => (

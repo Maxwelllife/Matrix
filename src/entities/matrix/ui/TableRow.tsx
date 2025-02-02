@@ -6,10 +6,11 @@ type TableRowProps = {
     row: { id: number; amount: number }[],
     rowIndex: number,
     sum: number,
-    key?: number
+    key?: number,
+    onRemove: () => void,
 };
 
-const TableRow: React.FC<TableRowProps> = ({ row, rowIndex, sum }) => {
+const TableRow: React.FC<TableRowProps> = ({ row, rowIndex, sum, onRemove }) => {
     const { updateCell, highlightClosestCells } = useMatrix();
     const [showPercentages, setShowPercentages] = useState(false);
 
@@ -63,6 +64,9 @@ const TableRow: React.FC<TableRowProps> = ({ row, rowIndex, sum }) => {
             ))}
             <td onMouseEnter={handleMouseEnterSum} onMouseLeave={handleMouseLeaveSum}>
                 {sum}
+            </td>
+            <td>
+                <button onClick={onRemove}>Remove</button>
             </td>
         </tr>
     );

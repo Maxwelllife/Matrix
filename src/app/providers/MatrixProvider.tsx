@@ -54,6 +54,20 @@ export const MatrixProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setMatrix(generateRandomMatrix(rows, columns));
         setHighlightedCells(new Set());  // Очищуємо підсвічені комірки при генерації
     };
+    const addRow = () => {
+        setMatrix((prev) => {
+            const newRow = Array.from({ length: prev[0].length }, (_, i) => ({
+                id: Math.max(...prev.flat().map(cell => cell.id)) + 1 + i,
+                amount: Math.floor(Math.random() * 900) + 100,
+            }));
+            return [...prev, newRow];
+        });
+    };
+
+    const removeRow = (rowIndex: number) => {
+        setMatrix((prev) => prev.filter((_, i) => i !== rowIndex));
+    };
+
     const highlightClosestCells = (targetValue: number) => {
         if (targetValue === -1) {
             setHighlightedCells(new Set());  // Очищаємо підсвічення
@@ -98,7 +112,9 @@ export const MatrixProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 updateCell,
                 regenerateMatrix,
                 highlightClosestCells,
-                showPercentages
+                showPercentages,
+                addRow,
+                removeRow
             }}
         >
             {children}
