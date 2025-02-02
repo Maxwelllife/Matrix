@@ -59,7 +59,7 @@ const TableRow: React.FC<TableRowProps> = ({ row, rowIndex, sum, onRemove }) => 
                     displayValue={localDisplayValues[i]}
                     onCellClick={() => handleCellClick(cell.id, cell.amount)}
                     onMouseEnter={() => handleMouseEnterCell(cell.amount)}
-                    onMouseLeave={() => handleMouseLeaveCell}
+                    onMouseLeave={handleMouseLeaveCell}
                 />
             ))}
             <td onMouseEnter={handleMouseEnterSum} onMouseLeave={handleMouseLeaveSum}>
