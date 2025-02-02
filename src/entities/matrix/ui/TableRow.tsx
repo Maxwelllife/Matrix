@@ -1,6 +1,6 @@
 import TableCell from '@/entities/matrix/ui/TableCell';
-import {useMatrix} from "@/app/providers/MatrixProvider.tsx";
-import {useEffect, useState} from "react";
+import { useMatrix } from "@/app/providers/MatrixProvider.tsx";
+import {useState, useCallback, useMemo} from "react";
 
 type TableRowProps = {
     row: { id: number; amount: number }[],
@@ -10,42 +10,62 @@ type TableRowProps = {
 };
 
 const TableRow: React.FC<TableRowProps> = ({ row, rowIndex, sum }) => {
-    const { hoveredRowIndex, showPercentages } = useMatrix();
-    const [localDisplayValues, setLocalDisplayValues] = useState<(string | number)[]>(row.map(cell => cell.amount));
+    const { updateCell, highlightClosestCells } = useMatrix();
+    const [showPercentages, setShowPercentages] = useState(false);
 
-    useEffect(() => {
-        if (hoveredRowIndex === rowIndex) {
-            console.log('Відображаємо відсотки для рядка:', rowIndex);
+// Обчислюємо локальні значення лише один раз
+    const localDisplayValues = useMemo(() => {
+        if (showPercentages) {
+            return row.map(cell => `${((cell.amount / sum) * 100).toFixed(1)}%`);
         }
-    }, [hoveredRowIndex, rowIndex]);
+        return row.map(cell => cell.amount);
+    }, [showPercentages, row, sum]);
+    // Обробник наведення на комірку суми
+    const handleMouseEnterSum = useCallback(() => {
+        setShowPercentages(true);
+    }, []);
 
-    const handleMouseEnter = () => {
-        const percentages = row.map((cell) => `${((cell.amount / sum) * 100).toFixed(1)}%`);
-        setLocalDisplayValues(percentages);
-        showPercentages(rowIndex);  // Показуємо відсотки для цього рядка
-        // console.log('rowIndex', rowIndex);
-        // console.log('hoveredRowIndex', hoveredRowIndex);
+    const handleMouseLeaveSum = useCallback(() => {
+        setShowPercentages(false);
+    }, []);
+
+    // Меморизовані обробники для комірок
+    const handleMouseEnterCell = useCallback(
+        (cellAmount: number) => {
+            highlightClosestCells(cellAmount);
+        },
+        [highlightClosestCells]
+    );
+
+    const handleMouseLeaveCell = useCallback(
+        () => {
+            highlightClosestCells(-1);
+        },
+        [highlightClosestCells]
+    );
+
+
+    const handleCellClick = (cellId: number, amount: number) => {
+        updateCell(rowIndex, cellId, amount + 1);
     };
-    const handleMouseLeave = () => {
-        setLocalDisplayValues(row.map(cell => cell.amount));
-        showPercentages(null);  // Прибираємо відсотки
-    };
+
     return (
         <tr>
             {row.map((cell, i) => (
                 <TableCell
                     key={cell.id}
                     cell={cell}
-                    rowIndex={rowIndex}
                     displayValue={localDisplayValues[i]}
+                    onCellClick={() => handleCellClick(cell.id, cell.amount)}
+                    onMouseEnter={() => handleMouseEnterCell(cell.amount)}
+                    onMouseLeave={() => handleMouseLeaveCell}
                 />
             ))}
-            <td onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-            >
+            <td onMouseEnter={handleMouseEnterSum} onMouseLeave={handleMouseLeaveSum}>
                 {sum}
             </td>
         </tr>
     );
 };
+
 export default TableRow;

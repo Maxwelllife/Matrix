@@ -1,34 +1,33 @@
 import {memo} from 'react';
-import {useMatrix} from '@/app/providers/MatrixProvider';
 import styles from './MatrixTable.module.css'
+import {useHighlightedCells} from "@/shared/hooks/useHighlightedCells.ts";
 
 
 type TableCellProps = {
     cell: { id: number; amount: number },
-    rowIndex: number,
     key?: number,
-    displayValue: number | string;  // Показуємо або значення, або відсоток
+    displayValue: number | string,
+    onCellClick?: () => void,
+    onMouseEnter?: () => void,
+    onMouseLeave?: () => void
 };
 
-const TableCell: React.FC<TableCellProps> = memo(({cell, rowIndex, displayValue}) => {
-        const {updateCell, highlightedCells, highlightClosestCells} = useMatrix();
-        console.log('Rendering cell', cell.id)
-        const handleMouseEnter = () => {
-            highlightClosestCells(cell.amount);  // Підсвічуємо комірки при наведенні
-        };
-        const handleMouseLeave = () => {
-            // Очищаємо підсвічування, коли курсор залишає комірку
-            highlightClosestCells(-1);  // Передаємо неіснуюче значення, щоб очистити стан
-        };
-        const handleClick = () => {
-            updateCell(rowIndex, cell.id, cell.amount + 1);
-        };
+const TableCell: React.FC<TableCellProps> = memo(({
+                                                      cell,
+                                                      displayValue,
+                                                      onCellClick,
+                                                      onMouseEnter,
+                                                      onMouseLeave,
+                                                  }) => {
+        // const {updateCell, highlightedCells, highlightClosestCells} = useMatrix();
+        const highlightedCells = useHighlightedCells();
+        console.log('Rendering cell', cell.id);
 
         return (
             <td
-                onMouseEnter={handleMouseEnter}
-                onMouseLeave={handleMouseLeave}
-                onClick={handleClick}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={onMouseLeave}
+                onClick={onCellClick}
                 className={`${
                     highlightedCells.has(cell.id) ? styles.highlight : ''
                 }`}
@@ -40,8 +39,7 @@ const TableCell: React.FC<TableCellProps> = memo(({cell, rowIndex, displayValue}
     (prevProps, nextProps) => {
         return (
             prevProps.cell.amount === nextProps.cell.amount &&
-            prevProps.displayValue === nextProps.displayValue &&
-            prevProps.rowIndex === nextProps.rowIndex
+            prevProps.displayValue === nextProps.displayValue
         );
     }
 );

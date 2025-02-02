@@ -13,9 +13,10 @@ interface MatrixContextType {
     updateCell: (rowIndex: number, cellId: number, newValue: number) => void;
     regenerateMatrix: (rows: number, columns: number, highlightCount: number) => void;
     showPercentages: (rowIndex: number | null) => void;
+    highlightedCells: any;
 }
 
-const MatrixContext = createContext<MatrixContextType | null>(null);
+export const MatrixContext = createContext<MatrixContextType | null>(null);
 
 const generateRandomMatrix = (rows: number, columns: number): Cell[][] => {
     let idCounter = 0;
