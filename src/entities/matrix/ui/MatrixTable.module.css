@@ -24,3 +24,56 @@ td:hover {
 .highlight {
     background-color: #635e35;
 }
+.matrixContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.matrixTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.matrixScrollContainer {
+    height: 300px;
+    overflow: auto;
+}
+
+th, td {
+    min-width: 60px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+/* Вирівнюємо заголовок і рядки */
+.stickyHeader {
+    position: sticky;
+    top: 0;
+    background-color: #8a8888;
+    z-index: 2;
+}
+
+.stickyFooter {
+    position: sticky;
+    bottom: 0;
+    background-color: #8a8888;
+    z-index: 2;
+}
+
+/* Фіксуємо суму та дії */
+.matrixTable th:last-child, .matrixTable td:last-child {
+    position: sticky;
+    right: 0;
+    background-color: #8a8888;
+    z-index: 3;
+}
+
+.matrixTable th:nth-last-child(2), .matrixTable td:nth-last-child(2) {
+    position: sticky;
+    right: 60px;
+    background-color: #8a8888;
+    z-index: 3;
+}

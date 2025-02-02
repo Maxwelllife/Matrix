@@ -2,7 +2,7 @@ import { useMatrix } from '@/app/providers/MatrixProvider';
 import TableRow from '@/entities/matrix/ui/TableRow';
 import { useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
-import './MatrixTable.module.css';
+import styles from './MatrixTable.module.css';
 
 const MatrixTable: React.FC = () => {
     const { matrix, rowSums, columnPercentiles, removeRow } = useMatrix();
@@ -13,14 +13,12 @@ const MatrixTable: React.FC = () => {
         count: matrix.length,
         overscan: 5,
         getScrollElement: () => parentRef.current,
-        estimateSize: () => 35,  // Adjust this value if needed
+        estimateSize: () => 40,  // Assuming a row height of 40px; adjust if necessary
     });
 
-    console.log('Virtualized rows:', rowVirtualizer.getVirtualItems());
-
     return (
-        <div className="matrix-container">
-            <table className="matrix-table">
+        <div className={styles.matrixContainer}>
+            <table className={styles.matrixTable}>
                 <thead>
                 <tr>
                     {matrix[0].map((_, colIndex) => (
@@ -32,12 +30,11 @@ const MatrixTable: React.FC = () => {
                 </thead>
             </table>
 
-            <div ref={parentRef} className="matrix-scroll-container" style={{ height: '300px', overflow: 'auto' }}>
-                <table className="matrix-table">
+            <div ref={parentRef} className={styles.matrixScrollContainer}>
+                <table className={styles.matrixTable}>
                     <tbody>
                     {rowVirtualizer.getVirtualItems().map((virtualRow) => {
                         const rowIndex = virtualRow.index;
-                        console.log(`Rendering row: ${rowIndex}`);
                         return (
                             <TableRow
                                 key={rowIndex}
@@ -52,7 +49,7 @@ const MatrixTable: React.FC = () => {
                 </table>
             </div>
 
-            <table className="matrix-table">
+            <table className={styles.matrixTable} style={{ marginTop: 'auto' }}>
                 <tfoot>
                 <tr>
                     {columnPercentiles.map((percentile, colIndex) => (
