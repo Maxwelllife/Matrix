@@ -1,18 +1,18 @@
 import { useMatrix } from '@/app/providers/MatrixProvider';
 import TableRow from '@/entities/matrix/ui/TableRow';
-import './MatrixTable.css';
+import './MatrixTable.module.css';
 
 const MatrixTable: React.FC = () => {
     const { matrix, rowSums, columnPercentiles } = useMatrix();
 
     return (
-        <table className="w-full border-collapse border border-gray-300">
+        <table className="">
             <thead>
             <tr>
                 {matrix[0].map((_, colIndex) => (
-                    <th key={colIndex} className="border border-gray-300 p-2">Col {colIndex + 1}</th>
+                    <th key={colIndex}>Col {colIndex + 1}</th>
                 ))}
-                <th className="border border-gray-300 p-2">Sum</th>
+                <th>Sum</th>
             </tr>
             </thead>
             <tbody>
@@ -21,9 +21,9 @@ const MatrixTable: React.FC = () => {
             ))}
             <tr>
                 {columnPercentiles.map((percentile, colIndex) => (
-                    <td key={colIndex} className="border border-gray-300 p-2">{percentile.toFixed(1)}</td>
+                    <td key={colIndex}>{percentile.toFixed(1)}</td>
                 ))}
-                <td className="border border-gray-300 p-2 font-bold">50% Percentiles</td>
+                <td>50% Percentiles</td>
             </tr>
             </tbody>
         </table>

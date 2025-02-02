@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useMatrix } from '@/app/providers/MatrixProvider.tsx';
-import './MatrixForm.css';
+import './MatrixForm.module.css';
 
 const MatrixForm: React.FC = () => {
     const [rows, setRows] = useState(5);
@@ -15,7 +15,7 @@ const MatrixForm: React.FC = () => {
 
 
     return (
-        <form onSubmit={handleSubmit} className="mb-4">
+        <form onSubmit={handleSubmit}>
             <div>
                 <label>Rows (M): </label>
                 <input
@@ -24,7 +24,6 @@ const MatrixForm: React.FC = () => {
                     onChange={(e) => setRows(Number(e.target.value))}
                     min="1"
                     max="100"
-                    className="border p-1"
                 />
             </div>
             <div>
@@ -35,7 +34,6 @@ const MatrixForm: React.FC = () => {
                     onChange={(e) => setColumns(Number(e.target.value))}
                     min="1"
                     max="100"
-                    className="border p-1"
                 />
             </div>
             <div>
@@ -46,10 +44,9 @@ const MatrixForm: React.FC = () => {
                     onChange={(e) => setHighlightCount(Number(e.target.value))}
                     min="1"
                     max={rows * columns}
-                    className="border p-1"
                 />
             </div>
-            <button type="submit" className="mt-2 bg-blue-500 text-white p-1">
+            <button type="submit">
                 Generate Table
             </button>
         </form>

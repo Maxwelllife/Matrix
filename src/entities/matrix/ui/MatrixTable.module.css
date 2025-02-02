@@ -4,13 +4,14 @@ table {
 }
 
 th, td {
+    width: 60px;
     border: 1px solid #ccc;
-    padding: 8px;
     text-align: center;
+    padding: 5px;
 }
 
 th {
-    background-color: #f5f5f5;
+    background-color: #8a8888;
 }
 
 td {
@@ -18,5 +19,8 @@ td {
 }
 
 td:hover {
-    background-color: #e0e0e0;
+    background-color: #a57908;
+}
+.highlight {
+    background-color: #635e35;
 }

@@ -12,6 +12,7 @@ interface MatrixContextType {
     columnPercentiles: number[];
     updateCell: (rowIndex: number, cellId: number, newValue: number) => void;
     regenerateMatrix: (rows: number, columns: number, highlightCount: number) => void;
+    showPercentages: (rowIndex: number | null) => void;
 }
 
 const MatrixContext = createContext<MatrixContextType | null>(null);
@@ -39,6 +40,8 @@ const calculateColumnPercentiles = (matrix: Cell[][]): number[] => {
 export const MatrixProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [matrix, setMatrix] = useState<Cell[][]>(generateRandomMatrix(5, 5));
     const [highlightCount, setHighlightCount] = useState<number>(5);
+    const [highlightedCells, setHighlightedCells] = useState<Set<number>>(new Set());  // Додаємо стейт для підсвічених комірок
+    const [hoveredRowIndex, setHoveredRowIndex] = useState<number | null>(null);  // Стан наведення на суму
 
     const rowSums = matrix.map((row) => row.reduce((sum, cell) => sum + cell.amount, 0));
     const columnPercentiles = calculateColumnPercentiles(matrix);
@@ -48,6 +51,30 @@ export const MatrixProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         const validatedX = Math.min(newHighlightCount, totalCells);  // Перевірка X
         setHighlightCount(validatedX);
         setMatrix(generateRandomMatrix(rows, columns));
+        setHighlightedCells(new Set());  // Очищуємо підсвічені комірки при генерації
+    };
+    const highlightClosestCells = (targetValue: number) => {
+        if (targetValue === -1) {
+            setHighlightedCells(new Set());  // Очищаємо підсвічення
+            return;
+        }
+        // Перетворюємо матрицю на одномірний масив для пошуку
+        const allCells = matrix.flat();
+
+        // Сортуємо за різницею значень між коміркою і значенням targetValue
+        const sortedCells = allCells
+            .map(cell => ({
+                ...cell,
+                difference: Math.abs(cell.amount - targetValue),
+            }))
+            .sort((a, b) => a.difference - b.difference);
+
+        // Вибираємо `X` найближчих комірок
+        const closestCellIds = new Set(sortedCells.slice(0, highlightCount).map(cell => cell.id));
+        setHighlightedCells(closestCellIds);
+    };
+    const showPercentages = (rowIndex: number | null) => {
+        setHoveredRowIndex(rowIndex);  // Зберігаємо індекс рядка з відсотками
     };
     const updateCell = (rowIndex: number, cellId: number, newValue: number) => {
         setMatrix((prev) =>
@@ -60,7 +87,19 @@ export const MatrixProvider: React.FC<{ children: React.ReactNode }> = ({ childr
     };
 
     return (
-        <MatrixContext.Provider value={{ matrix, highlightCount, rowSums, columnPercentiles, updateCell, regenerateMatrix }}>
+        <MatrixContext.Provider
+            value={{
+                matrix,
+                highlightCount,
+                highlightedCells,
+                rowSums,
+                columnPercentiles,
+                updateCell,
+                regenerateMatrix,
+                highlightClosestCells,
+                showPercentages
+            }}
+        >
             {children}
         </MatrixContext.Provider>
     );
