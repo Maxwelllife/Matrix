@@ -1,5 +1,15 @@
-form {
+.form {
     margin-bottom: 20px;
+    text-align: center;
+}
+.input_list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.input_item {
+    margin-right: 20px;
+    text-align: center;
 }
 
 label {

@@ -37,7 +37,8 @@ td:hover {
 }
 
 .matrixScrollContainer {
-    height: 300px;
+    height: calc(100vh - 500px);
+    width: calc(100vw - 40px);
     overflow: auto;
 }
 
@@ -63,17 +64,59 @@ th, td {
     z-index: 2;
 }
 
-/* Фіксуємо суму та дії */
-.matrixTable th:last-child, .matrixTable td:last-child {
-    position: sticky;
-    right: 0;
-    background-color: #8a8888;
-    z-index: 3;
-}
-
 .matrixTable th:nth-last-child(2), .matrixTable td:nth-last-child(2) {
     position: sticky;
     right: 60px;
     background-color: #8a8888;
     z-index: 3;
+}
+.matrixContainer {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.matrixTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    min-width: 60px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+/* Закріплення заголовка */
+thead th {
+    position: sticky;
+    top: 0;
+    background-color: #8a8888;
+    z-index: 2;
+}
+
+/* Закріплення футера */
+tfoot {
+    position: sticky;
+    bottom: 0;
+    background-color: #8a8888;
+    z-index: 2;
+}
+
+/* Закріплення правого стовпця */
+.matrixTable th:last-child, .matrixTable td:last-child {
+    position: sticky;
+    right: 0;
+    background-color: #8a8888;
+    z-index: 2;
+}
+
+.matrixTable th:nth-last-child(2), .matrixTable td:nth-last-child(2) {
+    position: sticky;
+    right: 90px;
+    background-color: #8a8888;
+    z-index: 2;
 }

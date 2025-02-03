@@ -18,20 +18,17 @@ const MatrixTable: React.FC = () => {
 
     return (
         <div className={styles.matrixContainer}>
-            <table className={styles.matrixTable}>
-                <thead>
-                <tr>
-                    {matrix[0].map((_, colIndex) => (
-                        <th key={colIndex}>Col {colIndex + 1}</th>
-                    ))}
-                    <th>Sum</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-            </table>
-
             <div ref={parentRef} className={styles.matrixScrollContainer}>
                 <table className={styles.matrixTable}>
+                    <thead>
+                    <tr>
+                        {matrix[0].map((_, colIndex) => (
+                            <th key={colIndex}>Col {colIndex + 1}</th>
+                        ))}
+                        <th>Sum</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
                     <tbody>
                     {rowVirtualizer.getVirtualItems().map((virtualRow) => {
                         const rowIndex = virtualRow.index;
@@ -46,19 +43,16 @@ const MatrixTable: React.FC = () => {
                         );
                     })}
                     </tbody>
+                    <tfoot>
+                    <tr>
+                        {columnPercentiles.map((percentile, colIndex) => (
+                            <td key={colIndex}>{percentile.toFixed(1)}</td>
+                        ))}
+                        <td colSpan={2}>50% Percentiles</td>
+                    </tr>
+                    </tfoot>
                 </table>
             </div>
-
-            <table className={styles.matrixTable} style={{ marginTop: 'auto' }}>
-                <tfoot>
-                <tr>
-                    {columnPercentiles.map((percentile, colIndex) => (
-                        <td key={colIndex}>{percentile.toFixed(1)}</td>
-                    ))}
-                    <td colSpan={2}>50% Percentiles</td>
-                </tr>
-                </tfoot>
-            </table>
         </div>
     );
 };
