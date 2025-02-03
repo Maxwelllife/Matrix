@@ -40,7 +40,7 @@ const calculateColumnPercentiles = (matrix: Cell[][]): number[] => {
 
 export const MatrixProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [matrix, setMatrix] = useState<Cell[][]>(generateRandomMatrix(5, 5));
-    const [highlightCount, setHighlightCount] = useState<number>(5);
+    const [highlightCount, setHighlightCount] = useState<number>(6);
     const [highlightedCells, setHighlightedCells] = useState<Set<number>>(new Set());  // Додаємо стейт для підсвічених комірок
     const [hoveredRowIndex, setHoveredRowIndex] = useState<number | null>(null);  // Стан наведення на суму
 
@@ -85,7 +85,7 @@ export const MatrixProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             .sort((a, b) => a.difference - b.difference);
 
         // Вибираємо `X` найближчих комірок
-        const closestCellIds = new Set(sortedCells.slice(0, highlightCount).map(cell => cell.id));
+        const closestCellIds = new Set(sortedCells.slice(0, highlightCount+1).map(cell => cell.id));
         setHighlightedCells(closestCellIds);
     };
     const showPercentages = (rowIndex: number | null) => {
